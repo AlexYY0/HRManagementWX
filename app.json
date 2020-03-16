@@ -1,0 +1,48 @@
+{
+  "pages": [
+    "pages/news/news",
+    "pages/news/news-detail/news-detail",
+    "pages/booking/booking",
+    "pages/me/me",
+    "pages/me/login/login",
+    "pages/me/feedback/feedback",
+    "pages/me/about/about"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#7acfa6",
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "西大图书馆预订",
+    "backgroundColor": "#7acfa6",
+    "backgroundTextStyle": "light",
+    "enablePullDownRefresh": true
+  },
+  "tabBar": {
+    "color": "#7f848a",
+    "selectedColor": "#7acfa6",
+    "backgroundColor": "#f7f6fb",
+    "list": [
+      {
+        "pagePath": "pages/news/news",
+        "text": "首页",
+        "iconPath": "images/news/news.png",
+        "selectedIconPath": "images/news/news@active.png"
+      },
+      {
+        "pagePath": "pages/booking/booking",
+        "text": "预订",
+        "iconPath": "images/booking/booking.png",
+        "selectedIconPath": "images/booking/booking@active.png"
+      },
+      {
+        "pagePath": "pages/me/me",
+        "text": "我的",
+        "iconPath": "images/me/me.png",
+        "selectedIconPath": "images/me/me@active.png"
+      }
+    ]
+  },
+  "networkTimeout": {
+    "request": 10000
+  },
+  "sitemapLocation": "sitemap.json"
+}
