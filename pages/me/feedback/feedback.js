@@ -1,5 +1,6 @@
 // pages/me/feedback/feedback.js
 //获取应用实例
+var api = require('../../../utils/api.js')
 var app = getApp();
 Page({
   data: {
@@ -17,10 +18,8 @@ Page({
     wx.getSystemInfo({
       success: function (res) {
         var info = '---\r\n用户信息\r\n';
-        info += '用户名：' + app._user.wx.nickName;
-        if (app._user.we.type) {
-          info += '（' + app._user.we.type + '-' + app._user.we.info.name + '-' + app._user.we.info.id + '）';
-        }
+        info += '微信名：' + app._user.wx.nickName;
+        info += '（工号：' + app._user.we.userid + '-姓名：' + app._user.we.empname + '）';
         info += '\r\n手机型号：' + res.model;
         info += '（' + res.windowWidth + 'x' + res.windowHeight + '）';
         info += '\r\n微信版本号：' + res.version;
@@ -29,21 +28,20 @@ Page({
         });
       }
     });
-    wx.request({
-      url: 'https://we.cqu.pt/api/upload/get_upload_token.php',
-      method: 'POST',
-      data: app.key({
-        openid: app._user.openid
-      }),
-      success: function (res) {
-        if (res.data.status === 200) {
-          _this.setData({
+    api.get('/gettoken',{}).then(res => {
+      if (res.obj && res.status === 200) {
+		  _this.setData({
             upload: true,
-            qiniu: res.data.data.token
+            qiniu: res.obj
           });
-        }
+      }else {
+        wx.hideToast();
+        app.showErrorModal(res.msg, '获取七牛云令牌失败');
       }
-    })
+    }).catch(err => {
+      wx.hideToast();
+      app.showErrorModal(err.errMsg, '获取七牛云令牌失败');
+    });
   },
   listenerTitle: function (e) {
     this.setData({
@@ -85,7 +83,7 @@ Page({
     var _this = this;
     // 上传图片
     wx.uploadFile({
-      url: 'https://up.qbox.me',
+      url: 'https://upload.qiniup.com',
       header: {
         'Content-Type': 'multipart/form-data'
       },
@@ -98,7 +96,7 @@ Page({
         var data = JSON.parse(res.data);
         if (data.key) {
           _this.setData({
-            imgs: _this.data.imgs.concat('http://wecqupt.congm.in/' + data.key)
+            imgs: _this.data.imgs.concat('http://storage.emperorws.club/' + data.key)
           });
         }
         if (_this.data.imgs.length === _this.data.imgLen) {
@@ -154,38 +152,30 @@ Page({
             content += imgs;
           }
           app.showLoadToast();
-          wx.request({
-            url: app._server + '/api/feedback.php',
-            data: app.key({
-              openid: app._user.openid,
-              title: title,
-              body: content
-            }),
-            method: 'POST',
-            success: function (res) {
-              if (res.data.status === 200) {
-                var text = '反馈成功，您可通过访问 ' + res.data.data.html_url + ' 了解反馈动态';
-                wx.showModal({
-                  title: '反馈成功',
-                  content: text,
-                  showCancel: false,
-                  success: function (res) {
-                    wx.navigateBack();
-                  }
-                });
-              } else {
-                app.showErrorModal(res.data.message, '提交失败');
-              }
-            },
-            fail: function (res) {
-              app.showErrorModal(res.errMsg, '提交失败');
-            },
-            complete: function () {
+		  api.get('/feedback',{
+			  title: title,
+              content: content
+		  }).then(res => {
+			  if (res.data.obj && res.status === 200) {
+				  var text = '反馈成功，您可通过访问 ' + res.data.obj.url + ' 了解反馈动态';
+				  wx.showModal({
+					  title: '反馈成功',
+					  content: text,
+					  showCancel: false,
+					  success: function (res) {
+						wx.navigateBack();
+					  }
+				});
+			  }else {
+                wx.hideToast();
+				app.showErrorModal(res.data.msg, '提交失败');
+			  }
+			}).catch(err => {
               wx.hideToast();
-            }
-          });
+			  app.showErrorModal(err.errMsg, '提交失败');
+			});
+          }
         }
-      }
     });
   }
 });

@@ -23,7 +23,7 @@
 		}
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.3.1",
+	"libVersion": "2.10.3",
 	"appid": "wx33198436ed5c5a59",
 	"projectname": "%E5%AE%9A%E4%BD%8D%E6%89%93%E5%8D%A1%E7%B3%BB%E7%BB%9F",
 	"debugOptions": {
@@ -49,14 +49,19 @@
 			"currentL": -1,
 			"list": []
 		},
+		"gamePlugin": {
+			"current": -1,
+			"list": []
+		},
 		"miniprogram": {
 			"current": 0,
 			"list": [
 				{
 					"id": 0,
-					"name": "正常模式",
-					"pathName": "pages/news/news",
-					"query": ""
+					"name": "pages/me/me",
+					"pathName": "pages/me/me",
+					"query": "",
+					"scene": null
 				}
 			]
 		}

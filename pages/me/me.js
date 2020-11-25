@@ -5,20 +5,20 @@ Page({
   data: {
     user: {}
   },
-  onShow: function () {
+  onShow: function(){
     this.getData();
   },
-  getData: function () {
+  getData: function(){
     var _this = this;
-    var days = ['一', '二', '三', '四', '五', '六', '日'];
+    var date=new Date();
+    var month=(new Date()).getMonth();
+    var days = ['一','二','三','四','五','六','日'];
     _this.setData({
       'user': app._user,
-      'time': {
-        'term': app._time.term,
-        'week': app._time.week,
-        'day': days[app._time.day - 1]
-      },
-      'is_bind': !!app._user.is_bind
+      'is_bind': !!app._user.is_bind,
+      'today': app.util.getYMD(date),
+      'quarter': Math.ceil(month/3),
+      'week': days[date.getUTCDay()]
     });
   }
 });

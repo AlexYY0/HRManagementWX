@@ -1,8 +1,7 @@
 {
   "pages": [
-    "pages/news/news",
-    "pages/news/news-detail/news-detail",
-    "pages/booking/booking",
+    "pages/home/home",
+    "pages/sign/sign",
     "pages/me/me",
     "pages/me/login/login",
     "pages/me/feedback/feedback",
@@ -11,7 +10,7 @@
   "window": {
     "navigationBarBackgroundColor": "#7acfa6",
     "navigationBarTextStyle": "white",
-    "navigationBarTitleText": "西大图书馆预订",
+    "navigationBarTitleText": "定位打卡系统",
     "backgroundColor": "#7acfa6",
     "backgroundTextStyle": "light",
     "enablePullDownRefresh": true
@@ -22,16 +21,10 @@
     "backgroundColor": "#f7f6fb",
     "list": [
       {
-        "pagePath": "pages/news/news",
-        "text": "首页",
-        "iconPath": "images/news/news.png",
-        "selectedIconPath": "images/news/news@active.png"
-      },
-      {
-        "pagePath": "pages/booking/booking",
-        "text": "预订",
-        "iconPath": "images/booking/booking.png",
-        "selectedIconPath": "images/booking/booking@active.png"
+        "pagePath": "pages/sign/sign",
+        "text": "快速打卡",
+        "iconPath": "images/sign/check_selected.png",
+        "selectedIconPath": "images/sign/check_selected@active.png"
       },
       {
         "pagePath": "pages/me/me",
@@ -42,7 +35,16 @@
     ]
   },
   "networkTimeout": {
-    "request": 10000
+    "request": 10000,
+    "connectSocket": 10000,
+    "uploadFile": 10000,
+    "downloadFile": 10000
   },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序定位打卡查询"
+    }
+  },
+  "debug": true,
   "sitemapLocation": "sitemap.json"
 }

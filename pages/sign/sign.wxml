@@ -1,0 +1,137 @@
+<!--pages/sign/sign.wxml-->
+<view class="sign-page">
+    <!-- 有打卡任务 -->
+    <block wx:if="{{flag}}">
+        <!-- module a -->
+        <view class="module-a">
+            <view class="module-a-l">
+                <view class="item">
+                    <text class="key">您今日的班次: </text><text class="task-name">{{currenttask.businesshours.busihoursname}}</text>
+                </view>
+                <view class="item">
+                    <view class="key">{{distance}}</view>
+                    <view class="update-address-btn {{updateAddres ? 'update-address' : 'updateAddres'}}" bindtap="updateDistance">
+                        <image class="update-address-icon" src="../../images/sign/refresh.png"></image>
+                        <text>更新</text>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <!-- module b -->
+        <view class="module-b">
+            <!-- 状态为0：倒计时，未签到 -->
+            <block wx:if="{{clockInFlag == 0}}">
+                <view class="tit">
+                    <block wx:if="{{currentTimeFlag == 0}}">
+                        <text>上班倒计时</text>
+                    </block>
+                    <block wx:if="{{currentTimeFlag == 1 && clockInFlag == 0}}">
+                        <text>上班已迟到</text>
+                    </block>
+                    <block wx:if="{{currentTimeFlag == 2 && clockInFlag == 0}}">
+                        <text>今日缺勤，已下班</text>
+                    </block>
+                </view>
+                <view class="num">
+                    <text class="hour">{{clock.hour}}</text>
+                    <text>:</text>
+                    <text class="min">{{clock.min}}</text>
+                </view>
+                <view class="sign-wrap" bindtap="signTask">
+                    <view class="sign-btn"><image src="../../images/sign/sign_btn_{{btn}}.png"></image></view>
+                </view>
+            </block>
+
+            <!-- 状态为1：已签到 -->
+            <block wx:if="{{clockInFlag == 10 || clockInFlag == 20}}">
+                <block wx:if="{{currentTimeFlag == 0}}">
+                    <view class="tit success">
+                        <text>上班签到成功！上班倒计时中</text>
+                    </view>
+                    <view class="num unable">
+                        <text class="hour">{{clock.hour}}</text>
+                        <text>:</text>
+                        <text class="min">{{clock.min}}</text>
+                    </view>
+                    <view class="sign-wrap">
+                        <view class="sign-btn"><image src="../../images/sign/sign_btn_2.png"></image></view>
+                    </view>
+                </block>
+                <block wx:if="{{currentTimeFlag == 1}}">
+                    <view class="tit success">
+						<text>上班签到成功！下班倒计时中</text>
+					</view>
+                    <view class="num unable">
+                        <text class="hour">{{clock.hour}}</text>
+                        <text>:</text>
+                        <text class="min">{{clock.min}}</text>
+                    </view>
+                    <view class="sign-wrap" bindtap="signTask">
+                        <view class="sign-btn"><image src="../../images/sign/sign_btn_{{btn}}.png"></image></view>
+                    </view>
+                </block>
+            </block>
+
+            <!-- 状态为2：倒计时，未签退 -->
+            <block wx:if="{{clockInFlag == 10 || clockInFlag == 20}}">
+                <block wx:if="{{currentTimeFlag == 2}}">
+                    <text>已下班</text>
+                    <view class="num">
+                        <text class="hour">{{clock.hour}}</text>
+                        <text>:</text>
+                        <text class="min">{{clock.min}}</text>
+                    </view>
+                    <view class="sign-wrap" bindtap="signTask">
+                        <view class="sign-btn"><image src="../../images/sign/sign_btn_{{btn}}.png"></image></view>
+                    </view>
+                </block>
+
+            </block>
+
+            <!-- 状态为3：已签退 -->
+            <block wx:if="{{clockInFlag == 2 || clockInFlag == 12 || clockInFlag == 22 || clockInFlag == 1 || clockInFlag == 11 || clockInFlag == 21}}">
+                <block wx:if="{{currentTimeFlag == 2 || currentTimeFlag==1}}">
+                    <view class="tit success">
+                        <text>下班签退成功,好好休息！</text>
+                    </view>
+                </block>
+                <view class="num unable">
+                    <text class="hour">00</text>
+                    <text>:</text>
+                    <text class="min">00</text>
+                </view>
+                <view class="sign-wrap">
+                    <view class="sign-btn"><image src="../../images/sign/sign_btn_2.png"></image></view>
+                </view>
+            </block>
+        </view>
+    </block>
+
+    <!-- 无打卡任务 -->
+    <block wx:else>
+        <view class="module-no">
+            <view class="tips">
+                <text>好好休息，今日不用上班！</text>
+            </view>
+            <view class="system-time">
+                <view class="tit">
+                    <text>倒计时</text>
+                </view>
+                <view class="num">
+                    <text class="hour">00</text>
+                    <text>:</text>
+                    <text class="min">00</text>
+                </view>
+            </view>
+
+            <view class="sign-wrap">
+                <view class="sign-btn"><image src="../../images/sign/sign_btn_unable.png"></image></view>
+            </view>
+        </view>
+    </block>
+
+    <!-- 提示信息 -->
+    <modal class="modal" hidden="{{modalHidden}}" no-cancel bindconfirm="modalChange" bindcancel="modalChange">
+        <view>{{modalText}}</view>
+    </modal>
+</view>
